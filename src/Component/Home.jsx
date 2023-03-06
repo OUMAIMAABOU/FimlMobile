@@ -9,12 +9,11 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 
-
-export default function Home() {
+export default function Home({navigation}) {
   return (
-    // <View style={styles.container}>
-    <linearGradient>
-   <Image
+    <View style={styles.container}>
+      {/* // <linearGradient> */}
+      <Image
         style={styles.image}
         source={require('../assets/image/picfilm.png')}
       />
@@ -22,14 +21,20 @@ export default function Home() {
       <Text style={styles.TitleG}>
         Download and watch offline wherever you are
       </Text>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('tab')}>
         <View style={styles.save}>
-          <Text style={{color: 'white', textAlign: 'center'}}>Show more</Text>
+          <Text
+            style={{
+              backgroundcolor: '#fe35b',
+              color: 'white',
+              textAlign: 'center',
+            }}>
+            Show more
+          </Text>
         </View>
       </TouchableOpacity>
-    </linearGradient>
-   
-    // </View>
+      {/* // </linearGradient> */}
+    </View>
   );
 }
 
@@ -60,10 +65,11 @@ const styles = StyleSheet.create({
   },
 
   TitleG: {
-    opacity: 0.7,
+    color: '#DCDCDC',
     fontSize: 20,
     textAlign: 'center',
     width: 290,
+    marginBottom: 40,
   },
   image: {
     width: 360,

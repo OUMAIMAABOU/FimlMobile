@@ -1,8 +1,9 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Home from '../Component/Home';
-import PlayList from '../Component/PlayList';
+import ListFilm from '../Component/ListFilm';
 import Favorite from '../Component/Favorite';
 import InfoFilm from '../Component/infoFilm';
+import Last from '../Component/Last';
 
 import {StyleSheet, Image, View} from 'react-native';
 const tab = createBottomTabNavigator();
@@ -10,26 +11,24 @@ export default function Tabs() {
   return (
     <tab.Navigator
       screenOptions={{
-        activeTintColor: 'red',
         tabBarStyle: [
           {
             backgroundColor: '#171717',
-            borderRadius: 30,
-            bottom: 30,
+            opacity: 0.8,
             height: 70,
           },
         ],
       }}>
       <tab.Screen
-        name="PlayList"
-        component={PlayList}
+        name="listFilm"
+        component={ListFilm}
         options={{
           tabBarLabel: '',
           headerShown: false,
           tabBarIcon: () => (
             <Image
               style={styles.image}
-              source={require('../assets/Icon/music-notes.png')}
+              source={require('../assets/Icon/HomeFilm.png')}
             />
           ),
         }}
@@ -43,7 +42,7 @@ export default function Tabs() {
           tabBarIcon: () => (
             <Image
               style={styles.image}
-              source={require('../assets/Icon/musical-note.png')}
+              source={require('../assets/Icon/showFilm.png')}
             />
           ),
         }}
@@ -57,12 +56,11 @@ export default function Tabs() {
           tabBarIcon: () => (
             <Image
               style={styles.image}
-              source={require('../assets/Icon/microphone.png')}
+              source={require('../assets/Icon/Plus.png')}
             />
           ),
         }}
       />
-
       <tab.Screen
         name="Home"
         component={Home}
@@ -72,7 +70,22 @@ export default function Tabs() {
           tabBarIcon: () => (
             <Image
               style={styles.image}
-              source={require('../assets/Icon/love.png')}
+              source={require('../assets/Icon/fav.png')}
+            />
+          ),
+        }}
+      />
+
+      <tab.Screen
+        name="Last"
+        component={Last}
+        options={{
+          tabBarLabel: '',
+          headerShown: false,
+          tabBarIcon: () => (
+            <Image
+              style={styles.image}
+              source={require('../assets/Icon/downlaod.png')}
             />
           ),
         }}
@@ -82,10 +95,8 @@ export default function Tabs() {
 }
 const styles = StyleSheet.create({
   image: {
-    tintColor: 'white',
-  },
-  labelStyle: {
-    fontSize: 15,
-    fontWeight: 'bold',
+    // tintColor: 'white',
+    width: 170,
+    height: 170,
   },
 });
