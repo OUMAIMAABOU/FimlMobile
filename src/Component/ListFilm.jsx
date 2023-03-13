@@ -10,23 +10,36 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {useEffect, useState} from 'react';
-import {allMovies, pathImage} from '../tools/getMovies';
+import {allMovies, pathImage,Search} from '../tools/getMovies';
 import axios from 'axios';
 
 const {width, height} = Dimensions.get('window');
 
 export default function ListFilm({navigation}) {
   const [movies, setMovies] = useState([]);
+  const [titleMovies, setTitleMovies] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  let [page, setPage] = useState(1);
-
+  const [page, setPage] = useState(1);
+  const handleTitle = value => {
+    setTitleMovies(value);
+  };
   const getAllMovies = async () => {
     setMovies(await allMovies(page));
+  };
+  const SearchMovies = async () => {
+    setMovies(await Search(titleMovies));
   };
   useEffect(() => {
     getAllMovies();
     setIsLoading(false);
   }, []);
+  useEffect(() => {
+    if (!titleMovies) {
+      getAllMovies();
+    } else {
+      SearchMovies()
+    }
+  }, [titleMovies]);
 
   const renderItem = ({item}) => {
     return (
@@ -45,12 +58,12 @@ export default function ListFilm({navigation}) {
       </>
     );
   };
-  const onEndReached =  async() => {
-      page += 1;
-      setIsLoading(true);
-      setMovies(await allMovies(page))
-      setPage(page);
-  }
+  const onEndReached = async () => {
+    page += 1;
+    setIsLoading(true);
+    setMovies(await allMovies(page));
+    setPage(page);
+  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -58,8 +71,8 @@ export default function ListFilm({navigation}) {
         <Text style={styles.paragraph}>What would you like to watch?</Text>
       </View>
       <TextInput
-        // onChangeText={value => handleTitle(value)}
-        // value={titleSong}
+        onChangeText={value => handleTitle(value)}
+        value={titleMovies}
         placeholder="What would you like to watch?"
         style={styles.input}
       />

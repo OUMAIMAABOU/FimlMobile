@@ -12,7 +12,6 @@ export const MovieDetail = ({navigation, route}) => {
     overview = '',
     ...rest
   } = route.params;
-
   const [trailerId, setTrailerId] = useState('');
   const getDetail = async () => {
     setTrailerId(await Detail(id));
@@ -67,8 +66,10 @@ export const MovieDetail = ({navigation, route}) => {
         </View>
       </View>
       <View>
-        <Text>story</Text>
-        <Text style={styles.text}>{overview}</Text>
+        <View>
+          <Text style={styles.text}>Story:</Text>
+          <Text style={[styles.text, styles.overview]}>{overview}</Text>
+        </View>
       </View>
     </View>
   );
@@ -94,5 +95,13 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#fff',
+  },
+  overview: {
+    color: '#fff',
+    backgroundColor: '#171717',
+    margin: 5,
+    padding: 5,
+    borderColor: '#171717',
+    borderRadius: 3,
   },
 });

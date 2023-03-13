@@ -18,6 +18,11 @@ export const popularMovies = async (page) => {
   return response.data.results;
 };
 
+export const Search = async (Query) => {
+  response = await axios.get( `${path}/search/movie?api_key=${Api_key}&query=${Query}`);
+  return response.data.results;
+};
+
 export const Detail = async id => {
   try {
     response = await axios.get(`${path}/movie/${id}/videos?api_key=${Api_key}`);
