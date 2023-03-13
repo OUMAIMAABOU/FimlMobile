@@ -6,50 +6,60 @@ import {
   FlatList,
   SafeAreaView,
   Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 import {useEffect, useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
-import {popularMovies} from '../tools/getMovies';
+import {upcomingMovie, pathImage} from '../tools/getMovies';
 const {width, height} = Dimensions.get('window');
 
-export default function Film() {
-  const [popularMovie, setPopularMovies] = useState([]);
-  const pathImage = 'https://image.tmdb.org/t/p/w1280';
-  const getPopularMovies = async () => {
-    setPopularMovies(await popularMovies());
+export default function Film({navigation}) {
+  const [upcomingMovies, setUpcomingMovies] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  let [page, setPage] = useState(1);
+  const getUpcomingMovie = async () => {
+    setUpcomingMovies(await upcomingMovie());
   };
-
   useEffect(() => {
-    getPopularMovies();
+    getUpcomingMovie();
   }, []);
-
+  const onEndReached = async () => {
+    page += 1;
+    setIsLoading(true);
+    setUpcomingMovies(await upcomingMovie(page));
+    setPage(page);
+  };
+  const renderItem = ({item}) => {
+    return (
+      <>
+        <View style={styles.image}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('MovieDetail', {...item})}>
+            <Image
+              style={{width: '100%', height: '99%', borderRadius: 13}}
+              source={{
+                uri: `${pathImage}${item.poster_path}`,
+              }}
+            />
+          </TouchableOpacity>
+        </View>
+      </>
+    );
+  };
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.Parentparagraph}>
-        <Text style={styles.paragraph}>popular movies</Text>
+        <Text style={styles.paragraph}>Upcoming movies</Text>
       </View>
 
       <Text style={styles.Title}></Text>
       <View style={styles.Card}>
         <FlatList
-          data={popularMovie}
+          data={upcomingMovies}
           keyExtractor={item => item.id}
           numColumns={3}
           key={'_'}
-          renderItem={({item}) => {
-            return (
-              <>
-                <View style={styles.image}>
-                  <Image
-                    style={{width: '100%', height: '99%', borderRadius: 13}}
-                    source={{
-                      uri: `${pathImage}${item.poster_path}`,
-                    }}
-                  />
-                </View>
-              </>
-            );
-          }}
+          renderItem={renderItem}
+          onEndReached={onEndReached}
         />
       </View>
     </SafeAreaView>

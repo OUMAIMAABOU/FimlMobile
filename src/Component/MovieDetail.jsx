@@ -1,44 +1,31 @@
 import React, {useEffect, useState} from 'react';
-import {
-  SafeAreaView,
-  View,
-  Text,
-  Button,
-  TouchableOpacity,
-  Image,
-  ScrollView,
-} from 'react-native';
+import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
 import YouTube from 'react-native-youtube';
-
-import Axios from 'axios';
+import {Detail, pathImage} from '../tools/getMovies';
 import Icon from 'react-native-vector-icons/Ionicons';
-
 export const MovieDetail = ({navigation, route}) => {
-  const pathImage = 'https://image.tmdb.org/t/p/w1280';
+  const {
+    id,
+    title,
+    poster_path,
+    backdrop_path,
+    overview = '',
+    ...rest
+  } = route.params;
 
-  const {id, title, poster_path, backdrop_path, overview = ''} = route.params;
-
-  // states
   const [trailerId, setTrailerId] = useState('');
-
-  // get video
+  const getDetail = async () => {
+    setTrailerId(await Detail(id));
+  };
   useEffect(() => {
-    const url = `https://api.themoviedb.org/3/movie/${id}/videos?api_key=e6f0a580cb12c89a64f3d9deb6e801f8`;
-
-    Axios.get(url)
-      .then(response => {
-        if (response.data.results.length > 0) {
-          const trailerId = response.data.results[0].key;
-          console.log(response.data.results[0]);
-
-          setTrailerId(trailerId);
-        }
-      })
-      .catch(e => console.log(e));
+    try {
+      getDetail();
+    } catch (e) {
+      console.log(e);
+    }
   }, []);
-
   return (
-    <View>
+    <View style={styles.container}>
       <TouchableOpacity>
         <Icon
           name="chevron-back-outline"
@@ -56,35 +43,56 @@ export const MovieDetail = ({navigation, route}) => {
           play={true}
           loop={false}
           controls={1}
-          style={{alignSelf: 'stretch', height: 300}}
+          style={{height: 300}}
         />
       </View>
 
-      <View
-        style={{
-          marginBottom: 20,
-        }}>
-        <Text
+      <View style={styles.card}>
+        <Image
+          source={{uri: `${pathImage}${poster_path}`}}
+          style={styles.Image}
+        />
+        <View
           style={{
-            fontSize: 20,
-            fontWeight: 'bold',
+            margin: 5,
           }}>
-          {title}
-        </Text>
+          <Text style={styles.text}>title : {title}</Text>
+          <Text style={styles.text}>language : {rest.original_language}</Text>
+          <Text style={styles.text}>DATE : {rest.release_date}</Text>
+          <View style={{flexDirection: 'row'}}>
+            <Text style={styles.text}>Average : </Text>
+            <Text style={styles.text}>{rest.vote_average}</Text>
+            <Icon name="star-sharp" size={30} color="#FFFF00" />
+          </View>
+        </View>
       </View>
-      <View
-        style={{
-          paddingHorizontal: 10,
-          marginBottom: 20,
-        }}>
-        <Text
-          style={{
-            fontSize: 18,
-            lineHeight: 25,
-          }}>
-          {overview}
-        </Text>
+      <View>
+        <Text>story</Text>
+        <Text style={styles.text}>{overview}</Text>
       </View>
     </View>
   );
 };
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#171717',
+    opacity: 0.9,
+  },
+  card: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 2,
+    margin: 5,
+  },
+  Image: {
+    width: 100,
+    height: 150,
+    marginBottom: 10,
+  },
+  text: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#fff',
+  },
+});

@@ -2,9 +2,8 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Home from '../Component/Home';
 import ListFilm from '../Component/ListFilm';
 import Favorite from '../Component/Favorite';
-import InfoFilm from '../Component/infoFilm';
-import Last from '../Component/Last';
-import List from '../Component/List';
+import PopularFilm from '../Component/popularFilm';
+import Last from '../Component/upCaming';
 
 import {StyleSheet, Image, View} from 'react-native';
 const tab = createBottomTabNavigator();
@@ -35,15 +34,15 @@ export default function Tabs() {
         }}
       />
       <tab.Screen
-        name="infoFilm"
-        component={InfoFilm}
+        name="popularFilm"
+        component={PopularFilm}
         options={{
           tabBarLabel: '',
           headerShown: false,
           tabBarIcon: () => (
             <Image
-              style={styles.image}
-              source={require('../assets/Icon/showFilm.png')}
+              style={styles.image2}
+              source={require('../assets/Icon/trending.png')}
             />
           ),
         }}
@@ -99,5 +98,10 @@ const styles = StyleSheet.create({
     // tintColor: 'white',
     width: 170,
     height: 170,
+  },
+  image2: {
+    tintColor: 'white',
+    width: 35,
+    height: 35,
   },
 });
