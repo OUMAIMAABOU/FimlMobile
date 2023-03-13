@@ -2,16 +2,56 @@ import {
   View,
   Text,
   StyleSheet,
-  SafeAreaView,
   Image,
+  FlatList,
+  SafeAreaView,
   Dimensions,
-  TouchableOpacity,
 } from 'react-native';
+import {useEffect, useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import {popularMovies} from '../tools/getMovies';
+const {width, height} = Dimensions.get('window');
 
-export default function InfoFilm() {
+export default function Film() {
+  const [popularMovie, setPopularMovies] = useState([]);
+  const pathImage = 'https://image.tmdb.org/t/p/w1280';
+  const getPopularMovies = async () => {
+    setPopularMovies(await popularMovies());
+  };
+
+  useEffect(() => {
+    getPopularMovies();
+  }, []);
+
   return (
     <SafeAreaView style={styles.container}>
-      <Text>film</Text>
+      <View style={styles.Parentparagraph}>
+        <Text style={styles.paragraph}>popular movies</Text>
+      </View>
+
+      <Text style={styles.Title}></Text>
+      <View style={styles.Card}>
+        <FlatList
+          data={popularMovie}
+          keyExtractor={item => item.id}
+          numColumns={3}
+          key={'_'}
+          renderItem={({item}) => {
+            return (
+              <>
+                <View style={styles.image}>
+                  <Image
+                    style={{width: '100%', height: '99%', borderRadius: 13}}
+                    source={{
+                      uri: `${pathImage}${item.poster_path}`,
+                    }}
+                  />
+                </View>
+              </>
+            );
+          }}
+        />
+      </View>
     </SafeAreaView>
   );
 }
@@ -20,79 +60,45 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingTop: 40,
     backgroundColor: '#171717',
-    alignItems: 'center',
     opacity: 0.9,
-  },
-  paragraph: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginLeft: 20,
-    marginTop: 5,
-    color: '#FFFFFF',
-  },
-  paragraph2: {
-    fontSize: 15,
-    fontWeight: 'bold',
-    marginLeft: 20,
-    marginTop: 5,
-    opacity: 0.9,
-  },
-  image: {
-    width: 300,
-    height: 300,
-    borderRadius: 150,
   },
   Card: {
-    backgroundColor: '#171717',
-    position: 'absolute',
-    bottom: -60,
-    height: 340,
-    width: Dimensions.get('window').width,
-    borderRadius: 30,
-    shadowOffset: {width: 4, height: 5},
-    shadowOpacity: 0.4,
-    shadowRadius: 2,
-    paddingTop: 1,
-    marginBottom: 30,
-  },
-  Play: {
-    flexDirection: 'row',
+    padding: 15,
+    flex: 1,
+    alignItems: 'center',
     justifyContent: 'center',
   },
-  icon: {
-    marginLeft: 60,
-    width: 60,
-    height: 60,
-    tintColor: '#fff',
+
+  paragraph: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    color: '#FFFFFF',
+    textAlign: 'center',
+    width: 308,
+    // marginVertical: 20,
   },
-  iconF: {
-    marginLeft: 20,
-    width: 40,
-    height: 40,
-    tintColor: '#fff',
+  Parentparagraph: {
+    alignItems: 'center',
   },
-  favorite: {
-    width: 25,
-    height: 25,
-    tintColor: '#fff',
-    marginEnd: 20,
-    marginTop: 10,
+  Title: {
+    color: '#DCDCDC',
+    fontSize: 20,
+    width: 290,
+    marginBottom: 5,
+    marginTop: 5,
   },
-  title: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 30,
+  image: {
+    width: width * 0.3,
+    height: height * 0.2,
+    padding: 3,
   },
-  time: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 2,
-    marginRight: 20,
-    marginLeft: 20,
-  },
-  Next_pre: {
-    width: 20,
-    height: 20,
-    marginTop: 19,
+  input: {
+    backgroundColor: '#808080',
+    color: '#fff',
+    marginHorizontal: 24,
+    borderRadius: 7,
+    padding: 10,
+    paddingLeft: 18,
+    fontSize: 18,
   },
 });

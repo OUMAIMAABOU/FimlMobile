@@ -2,54 +2,68 @@ import {
   View,
   Text,
   StyleSheet,
-  ScrollView,
   Image,
   TextInput,
+  FlatList,
+  SafeAreaView,
+  Dimensions,
+  TouchableOpacity,
 } from 'react-native';
 import {useEffect, useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
+import {allMovies} from '../tools/getMovies';
+const {width, height} = Dimensions.get('window');
 
-export default function ListFilm() {
+export default function ListFilm({navigation}) {
+  const [movies, setMovies] = useState([]);
+  const pathImage = 'https://image.tmdb.org/t/p/w1280';
+
+  const getAllMovies = async () => {
+    setMovies(await allMovies());
+  };
+  useEffect(() => {
+    getAllMovies();
+  }, []);
+
   return (
-    <ScrollView style={styles.container}>
-      <Text style={styles.paragraph}>What would you like to watch?</Text>
+    <SafeAreaView style={styles.container}>
+      <View style={styles.Parentparagraph}>
+        <Text style={styles.paragraph}>What would you like to watch?</Text>
+      </View>
       <TextInput
         // onChangeText={value => handleTitle(value)}
         // value={titleSong}
-        placeholder="Search"
+        placeholder="What would you like to watch?"
         style={styles.input}
       />
-      <View>
-        <View style={styles.Card}>
-          <View style={styles.image}>
-            <Image
-              style={{width: '100%', height: '99%', borderRadius: 30}}
-              source={require('../assets/image/thewitch.jpg')}
-            />
-          </View>
-
-          <View style={styles.image}>
-            <Image
-              style={{width: '100%', height: '99%', borderRadius: 30}}
-              source={require('../assets/image/thewitch.jpg')}
-            />
-          </View>
-
-          <View style={styles.image}>
-            <Image
-              style={{width: '100%', height: '99%', borderRadius: 30}}
-              source={require('../assets/image/thewitch.jpg')}
-            />
-          </View>
-          <View style={styles.image}>
-            <Image
-              style={{width: '100%', height: '99%', borderRadius: 30}}
-              source={require('../assets/image/thewitch.jpg')}
-            />
-          </View>
-        </View>
+      <View style={styles.Card}>
+        <FlatList
+          data={movies}
+          keyExtractor={item => item.id}
+          numColumns={3}
+          key={'_'}
+          renderItem={({item}) => {
+            return (
+              <>
+                <View style={styles.image}>
+                  <TouchableOpacity
+                    onPress={() =>
+                      navigation.navigate('MovieDetail', {...item})
+                    }>
+                    <Image
+                      style={{width: '100%', height: '99%', borderRadius: 13}}
+                      source={{
+                        uri: `${pathImage}${item.poster_path}`,
+                      }}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </>
+            );
+          }}
+        />
       </View>
-    </ScrollView>
+    </SafeAreaView>
   );
 }
 const styles = StyleSheet.create({
@@ -60,40 +74,40 @@ const styles = StyleSheet.create({
     opacity: 0.9,
   },
   Card: {
-    marginLeft: 15,
-    marginRight: 15,
-    flexDirection: 'row',
-    marginBottom: 5,
-    flexWrap: 'wrap',
+    padding: 15,
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   paragraph: {
     fontSize: 30,
     fontWeight: 'bold',
-    textAlign: 'center',
     color: '#FFFFFF',
+    textAlign: 'center',
     width: 308,
-    marginVertical: 30,
+    // marginVertical: 20,
+  },
+  Parentparagraph: {
+    alignItems: 'center',
   },
   Title: {
     color: '#DCDCDC',
     fontSize: 20,
     width: 290,
-    marginBottom: 40,
+    marginBottom: 5,
+    marginTop: 5,
   },
   image: {
-    width: 110,
-    height: 160,
-    borderRadius: 30,
-    marginRight: 10,
-    marginBottom: 10,
+    width: width * 0.3,
+    height: height * 0.2,
+    padding: 3,
   },
   input: {
-    marginBottom: 20,
     backgroundColor: '#808080',
     color: '#fff',
-    marginHorizontal: 10,
-    borderRadius: 13,
+    marginHorizontal: 24,
+    borderRadius: 7,
     padding: 10,
     paddingLeft: 18,
     fontSize: 18,

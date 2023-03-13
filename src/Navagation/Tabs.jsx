@@ -4,6 +4,7 @@ import ListFilm from '../Component/ListFilm';
 import Favorite from '../Component/Favorite';
 import InfoFilm from '../Component/infoFilm';
 import Last from '../Component/Last';
+import List from '../Component/List';
 
 import {StyleSheet, Image, View} from 'react-native';
 const tab = createBottomTabNavigator();
