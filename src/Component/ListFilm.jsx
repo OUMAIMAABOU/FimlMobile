@@ -10,8 +10,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import {useEffect, useState} from 'react';
-import {allMovies, pathImage,Search} from '../tools/getMovies';
-import axios from 'axios';
+import {allMovies, pathImage, Search} from '../tools/getMovies';
 
 const {width, height} = Dimensions.get('window');
 
@@ -19,7 +18,7 @@ export default function ListFilm({navigation}) {
   const [movies, setMovies] = useState([]);
   const [titleMovies, setTitleMovies] = useState('');
   const [isLoading, setIsLoading] = useState(true);
-  const [page, setPage] = useState(1);
+  let [page, setPage] = useState(1);
   const handleTitle = value => {
     setTitleMovies(value);
   };
@@ -37,7 +36,7 @@ export default function ListFilm({navigation}) {
     if (!titleMovies) {
       getAllMovies();
     } else {
-      SearchMovies()
+      SearchMovies();
     }
   }, [titleMovies]);
 
@@ -61,7 +60,7 @@ export default function ListFilm({navigation}) {
   const onEndReached = async () => {
     page += 1;
     setIsLoading(true);
-    setMovies(await allMovies(page));
+    setMovies(movies.concat(await allMovies(page)));
     setPage(page);
   };
 

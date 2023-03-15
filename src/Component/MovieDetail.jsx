@@ -1,7 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {View, Text, TouchableOpacity, Image, StyleSheet} from 'react-native';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  ScrollView,
+  Dimensions,
+  FlatList,
+} from 'react-native';
 import YouTube from 'react-native-youtube';
-import {Detail, pathImage} from '../tools/getMovies';
+import {Detail, pathImage, Casts} from '../tools/getMovies';
 import Icon from 'react-native-vector-icons/Ionicons';
 export const MovieDetail = ({navigation, route}) => {
   const {
@@ -13,16 +22,44 @@ export const MovieDetail = ({navigation, route}) => {
     ...rest
   } = route.params;
   const [trailerId, setTrailerId] = useState('');
+  const [Cast, setCast] = useState('');
+  const {width, height} = Dimensions.get('window');
+
   const getDetail = async () => {
     setTrailerId(await Detail(id));
+  };
+  const getCast = async () => {
+    setCast(await Casts(id));
   };
   useEffect(() => {
     try {
       getDetail();
+      getCast();
     } catch (e) {
       console.log(e);
     }
   }, []);
+  // const renderItem = ({item}) => {
+  //   return (
+  //     <>
+  //       <View style={styles.cast}>
+  //         <TouchableOpacity>
+  //           <Image
+  //             style={{width: '50%', height: '50%', borderRadius: 13}}
+  //             source={{
+  //               uri: `${pathImage}${item.profile_path}`,
+  //             }}
+  //           />
+  //         </TouchableOpacity>
+  //         <View>
+  //           <Text>{item.character}</Text>
+
+  //           <Text>{item.name}</Text>
+  //         </View>
+  //       </View>
+  //     </>
+  //   );
+  // };
   return (
     <View style={styles.container}>
       <TouchableOpacity>
@@ -45,7 +82,6 @@ export const MovieDetail = ({navigation, route}) => {
           style={{height: 300}}
         />
       </View>
-
       <View style={styles.card}>
         <Image
           source={{uri: `${pathImage}${poster_path}`}}
@@ -66,11 +102,23 @@ export const MovieDetail = ({navigation, route}) => {
         </View>
       </View>
       <View>
-        <View>
-          <Text style={styles.text}>Story:</Text>
+        <Text style={styles.text}>Overview:</Text>
+        <ScrollView style={{width: width * 1, height: height * 0.2}}>
           <Text style={[styles.text, styles.overview]}>{overview}</Text>
-        </View>
+        </ScrollView>
       </View>
+      {/* <View>
+        <Text>Cast</Text>
+        <View>
+          <FlatList
+            data={Cast}
+            keyExtractor={item => item.id}
+            renderItem={renderItem}
+            // numColumns={2}
+            horizontal={true}
+          />
+        </View>
+      </View> */}
     </View>
   );
 };
@@ -87,8 +135,8 @@ const styles = StyleSheet.create({
     margin: 5,
   },
   Image: {
-    width: 100,
-    height: 150,
+    width: 90,
+    height: 140,
     marginBottom: 10,
   },
   text: {
@@ -103,5 +151,11 @@ const styles = StyleSheet.create({
     padding: 5,
     borderColor: '#171717',
     borderRadius: 3,
+  },
+  cast: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 2,
+    margin: 5,
   },
 });

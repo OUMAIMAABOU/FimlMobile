@@ -4,15 +4,12 @@ import {
   StyleSheet,
   Text,
   Image,
-  Button,
   TouchableOpacity,
 } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
 
 export default function Home({navigation}) {
   return (
     <View style={styles.container}>
-      {/* // <linearGradient> */}
       <Image
         style={styles.image}
         source={require('../assets/image/picfilm.png')}
@@ -25,7 +22,7 @@ export default function Home({navigation}) {
         <View style={styles.save}>
           <Text
             style={{
-              backgroundcolor: '#fe35b',
+              // backgroundColor: '#fe35b',
               color: 'white',
               textAlign: 'center',
             }}>
@@ -33,7 +30,6 @@ export default function Home({navigation}) {
           </Text>
         </View>
       </TouchableOpacity>
-      {/* // </linearGradient> */}
     </View>
   );
 }

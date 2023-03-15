@@ -43,7 +43,7 @@ export default function PopularFilm({navigation}) {
   const onEndReached = async () => {
     page += 1;
     setIsLoading(true);
-    setPopularMovies(await popularMovies(page));
+    setPopularMovies(movies.concat(await popularMovies(page)));
     setPage(page);
   };
   return (

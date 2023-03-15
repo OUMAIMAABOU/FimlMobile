@@ -25,7 +25,7 @@ export default function Film({navigation}) {
   const onEndReached = async () => {
     page += 1;
     setIsLoading(true);
-    setUpcomingMovies(await upcomingMovie(page));
+    setUpcomingMovies(movies.concat(await upcomingMovie(page)));
     setPage(page);
   };
   const renderItem = ({item}) => {
