@@ -11,7 +11,6 @@ import {
 import {useEffect, useState} from 'react';
 import {popularMovies, pathImage} from '../tools/getMovies';
 const {width, height} = Dimensions.get('window');
-
 export default function PopularFilm({navigation}) {
   const [popularMovie, setPopularMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -21,7 +20,7 @@ export default function PopularFilm({navigation}) {
   };
   useEffect(() => {
     getPopularMovies();
-  }, []);
+  },[]);
 
   const renderItem = ({item}) => {
     return (

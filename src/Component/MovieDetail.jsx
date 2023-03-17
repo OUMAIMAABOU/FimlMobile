@@ -39,27 +39,7 @@ export const MovieDetail = ({navigation, route}) => {
       console.log(e);
     }
   }, []);
-  // const renderItem = ({item}) => {
-  //   return (
-  //     <>
-  //       <View style={styles.cast}>
-  //         <TouchableOpacity>
-  //           <Image
-  //             style={{width: '50%', height: '50%', borderRadius: 13}}
-  //             source={{
-  //               uri: `${pathImage}${item.profile_path}`,
-  //             }}
-  //           />
-  //         </TouchableOpacity>
-  //         <View>
-  //           <Text>{item.character}</Text>
 
-  //           <Text>{item.name}</Text>
-  //         </View>
-  //       </View>
-  //     </>
-  //   );
-  // };
   return (
     <View style={styles.container}>
       <TouchableOpacity>
@@ -107,18 +87,6 @@ export const MovieDetail = ({navigation, route}) => {
           <Text style={[styles.text, styles.overview]}>{overview}</Text>
         </ScrollView>
       </View>
-      {/* <View>
-        <Text>Cast</Text>
-        <View>
-          <FlatList
-            data={Cast}
-            keyExtractor={item => item.id}
-            renderItem={renderItem}
-            // numColumns={2}
-            horizontal={true}
-          />
-        </View>
-      </View> */}
     </View>
   );
 };

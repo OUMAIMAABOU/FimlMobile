@@ -11,30 +11,33 @@ import {
 } from 'react-native';
 import {useEffect, useState} from 'react';
 import {allMovies, pathImage, Search} from '../tools/getMovies';
-
+import {useSelector, useDispatch} from 'react-redux';
+import {getMovies} from '../../Redux/actions/MovieAction';
 const {width, height} = Dimensions.get('window');
 
 export default function ListFilm({navigation}) {
   const [movies, setMovies] = useState([]);
   const [titleMovies, setTitleMovies] = useState('');
   const [isLoading, setIsLoading] = useState(true);
+  const dispatch = useDispatch();
   let [page, setPage] = useState(1);
   const handleTitle = value => {
     setTitleMovies(value);
   };
-  const getAllMovies = async () => {
-    setMovies(await allMovies(page));
-  };
   const SearchMovies = async () => {
     setMovies(await Search(titleMovies));
   };
+  const selectMovies = useSelector(state => state.moviess);
   useEffect(() => {
-    getAllMovies();
-    setIsLoading(false);
+    dispatch(getMovies(page));
   }, []);
   useEffect(() => {
+    setMovies(selectMovies);
+    setIsLoading(false);
+  }, [selectMovies]);
+  useEffect(() => {
     if (!titleMovies) {
-      getAllMovies();
+      setMovies(selectMovies);
     } else {
       SearchMovies();
     }
